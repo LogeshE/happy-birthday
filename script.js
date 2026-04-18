@@ -147,7 +147,7 @@ class HeartSystem {
       progress: 0,
       rotation: utils.random(0, 360),
       rotationSpeed: utils.random(-3, 3),
-      opacity: utils.random(0.4, 0.7),
+      opacity: utils.random(0.55, 0.85),
       size: sizeVal
     };
 
@@ -335,17 +335,22 @@ class Carousel {
 
 const ScrollAnimations = {
   observer: null,
+  scrollFadeElements: [],
+  ticking: false,
 
   init() {
-    const targets = document.querySelectorAll('.fade-in-target');
+    const targets = document.querySelectorAll('.fade-in-target:not([data-scroll-fade])');
+    const scrollFadeTargets = document.querySelectorAll('[data-scroll-fade]');
 
+    // Set stagger delay for non-scroll-fade elements
     document.querySelectorAll('.section-inner, .love-letter-body').forEach(parent => {
-      const children = parent.querySelectorAll('.fade-in-target');
+      const children = parent.querySelectorAll('.fade-in-target:not([data-scroll-fade])');
       children.forEach((el, i) => {
         el.style.setProperty('--fade-delay', `${i * 0.12}s`);
       });
     });
 
+    // IntersectionObserver for gallery/closing sections
     const options = {
       root: null,
       rootMargin: '0px 0px -60px 0px',
@@ -362,6 +367,140 @@ const ScrollAnimations = {
     }, options);
 
     targets.forEach(el => this.observer.observe(el));
+
+    // Scroll-fade for love-letter section (fade in from 30% below, fade out at 30% above)
+    this.scrollFadeElements = Array.from(scrollFadeTargets);
+    if (this.scrollFadeElements.length > 0) {
+      const updateFade = () => {
+        if (!this.ticking) {
+          requestAnimationFrame(() => {
+            this.updateScrollFade();
+            this.ticking = false;
+          });
+          this.ticking = true;
+        }
+      };
+
+      window.addEventListener('scroll', updateFade, { passive: true });
+      window.addEventListener('resize', updateFade, { passive: true });
+      updateFade(); // Call once on init
+    }
+  },
+
+  updateScrollFade() {
+    const vh = window.innerHeight;
+    const fadeInStart = vh * 1.3;   // 30% below viewport
+    const fadeInEnd = vh;            // At bottom edge
+    const fadeOutStart = 0;           // At top edge
+    const fadeOutEnd = -vh * 0.3;     // 30% above viewport
+
+    this.scrollFadeElements.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      let opacity;
+
+      if (rect.top > fadeInStart) {
+        opacity = 0;
+      } else if (rect.top > fadeInEnd) {
+        opacity = 1 - (rect.top - fadeInEnd) / (fadeInStart - fadeInEnd);
+      } else if (rect.top >= fadeOutEnd) {
+        if (rect.top >= fadeOutStart) {
+          opacity = 1;
+        } else {
+          opacity = 1 + rect.top / (vh * 0.3);
+        }
+      } else {
+        opacity = 0;
+      }
+
+      el.style.opacity = Math.max(0, Math.min(1, opacity));
+    });
+  }
+};
+
+/* ========================================
+   LETTER SCROLL EFFECT
+   ======================================== */
+
+const LetterScrollEffect = {
+  section: null,
+  header: null,
+  track: null,
+  vh: 0,
+  trackHeight: 0,
+  phaseAScrollDist: 0,
+  phaseBScrollDist: 0,
+  totalScrollDist: 0,
+  ticking: false,
+
+  init() {
+    this.section = document.getElementById('love-letter');
+    if (!this.section) return;
+    this.header = this.section.querySelector('.letter-header');
+    this.track = this.section.querySelector('.letter-content-track');
+    if (!this.header || !this.track) return;
+
+    this.recalcLayout();
+    this.update();
+
+    const onScroll = () => {
+      if (!this.ticking) {
+        requestAnimationFrame(() => {
+          this.update();
+          this.ticking = false;
+        });
+        this.ticking = true;
+      }
+    };
+
+    const onResize = utils.throttle(() => {
+      this.recalcLayout();
+      this.update();
+    }, 150);
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onResize, { passive: true });
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', onResize, { passive: true });
+    }
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        this.recalcLayout();
+        this.update();
+      });
+    }
+  },
+
+  recalcLayout() {
+    this.vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    document.documentElement.style.setProperty('--app-vh', `${this.vh}px`);
+    this.trackHeight = this.track.offsetHeight;
+    this.phaseAScrollDist = this.vh * 0.65;
+    this.phaseBScrollDist = this.vh + this.trackHeight;
+    const exitBuffer = this.vh * 0.3;
+    this.totalScrollDist = this.phaseAScrollDist + this.phaseBScrollDist + exitBuffer;
+    this.section.style.height = `${this.vh + this.totalScrollDist}px`;
+  },
+
+  update() {
+    if (!this.section) return;
+    const vh = this.vh;
+    const sectionRect = this.section.getBoundingClientRect();
+    const scrolled = -sectionRect.top;
+
+    const headerHeight = this.header.offsetHeight;
+    const headerProgress = Math.max(0, Math.min(1, scrolled / this.phaseAScrollDist));
+    const centerY = (vh - headerHeight) / 2;
+    const headerY = centerY + (0 - centerY) * headerProgress;
+    this.header.style.setProperty('--letter-header-y', `${headerY}px`);
+    this.header.style.setProperty('--letter-header-dock', headerProgress.toFixed(3));
+
+    const contentScrolled = Math.max(0, scrolled - this.phaseAScrollDist);
+    const contentProgress = Math.max(0, Math.min(1, contentScrolled / this.phaseBScrollDist));
+    const startY = vh;
+    const endY = -this.trackHeight;
+    const contentY = startY + (endY - startY) * contentProgress;
+    this.track.style.setProperty('--letter-content-y', `${contentY}px`);
   }
 };
 
@@ -398,6 +537,43 @@ function initParallax() {
       });
     }
   }
+
+  // Multi-layer parallax: elements at different speeds create depth.
+  // useCSSVar=true for fade-in-target elements so transforms compose via --parallax-y.
+  const parallaxLayers = [
+    { el: document.querySelector('.hero-content'),        speed: 0.38, useCSSVar: false },
+    { el: document.querySelector('.section-heading'),     speed: 0.06, useCSSVar: true },
+    { el: document.querySelector('.section-subheading'),  speed: 0.09, useCSSVar: true },
+    { el: document.querySelector('.closing-heart-anim'),  speed: 0.10, useCSSVar: true },
+    { el: document.querySelector('.closing-title'),       speed: 0.07, useCSSVar: true },
+  ].filter(l => l.el);
+
+  let ticking = false;
+
+  function applyParallax() {
+    const scrollY = window.scrollY;
+    const vh = window.innerHeight;
+    parallaxLayers.forEach(({ el, speed, useCSSVar }) => {
+      let offset;
+      if (useCSSVar) {
+        const rect = el.getBoundingClientRect();
+        const clampedTop = Math.max(-vh, Math.min(vh, rect.top));
+        offset = (vh - clampedTop) * speed;
+        el.style.setProperty('--parallax-y', `${offset}px`);
+      } else {
+        offset = scrollY * speed;
+        el.style.transform = `translateY(${offset}px)`;
+      }
+    });
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(applyParallax);
+      ticking = true;
+    }
+  }, { passive: true });
 }
 
 /* ========================================
@@ -417,6 +593,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!prefersReduced) PetalSystem.start();
 
   ScrollAnimations.init();
+
+  if (!prefersReduced) LetterScrollEffect.init();
 
   const carousel = new Carousel('carousel-track', 'carousel-prev', 'carousel-next', 'carousel-dots');
   carousel.init();

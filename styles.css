@@ -117,9 +117,9 @@ body {
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(26, 10, 46, 0.4) 0%,
-    rgba(26, 10, 46, 0.2) 50%,
-    rgba(26, 10, 46, 0.7) 100%
+    rgba(26, 10, 46, 0.2) 0%,
+    rgba(26, 10, 46, 0.1) 50%,
+    rgba(26, 10, 46, 0.3) 100%
   );
   z-index: 1;
 }
@@ -130,6 +130,7 @@ body {
   text-align: center;
   padding: var(--space-md);
   max-width: 90vw;
+  will-change: transform;
 }
 
 .hero-eyebrow {
@@ -196,14 +197,22 @@ body {
 .section-gallery {
   position: relative;
   padding: var(--space-lg) 0;
-  background: linear-gradient(180deg, var(--color-bg-deep) 0%, var(--color-bg-dark) 100%);
+  background: linear-gradient(180deg, rgba(26,10,46,0.72) 0%, rgba(45,27,105,0.72) 100%);
   z-index: 2;
 }
 
 .section-inner {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 0 var(--space-md);
+  padding: var(--space-md);
+}
+
+.section-gallery .section-inner {
+  background: rgba(26,10,46,0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.06);
 }
 
 .section-inner--narrow {
@@ -349,7 +358,7 @@ body {
 
 .section-divider {
   height: 60px;
-  background: linear-gradient(180deg, var(--color-bg-dark) 0%, var(--color-bg-deep) 100%);
+  background: linear-gradient(180deg, rgba(45,27,105,0.4) 0%, rgba(26,10,46,0.4) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -368,18 +377,69 @@ body {
    ======================================== */
 
 .section-love-letter {
-  padding: var(--space-xl) var(--space-md);
-  background: var(--color-bg-deep);
+  background: rgba(26,10,46,0.68);
   position: relative;
   z-index: 2;
+  height: 450vh;
+}
+
+.letter-bg-layer {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(ellipse at 40% 50%, rgba(192,57,43,0.4) 0%, transparent 65%),
+    radial-gradient(ellipse at 60% 40%, rgba(139,0,0,0.3) 0%, transparent 70%);
+  will-change: transform;
+  z-index: 0;
+}
+
+.letter-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  height: var(--app-vh, 100dvh);
+  width: 100%;
+  z-index: 1;
 }
 
 .letter-header {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-md);
-  margin-bottom: var(--space-lg);
+  padding: var(--space-md);
+  text-align: center;
+  transform: translateY(var(--letter-header-y, 40vh));
+  z-index: 10;
+  will-change: transform;
+  pointer-events: none;
+}
+
+.letter-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(26, 10, 46, 0.92) 0%,
+    rgba(26, 10, 46, 0.6) 60%,
+    rgba(26, 10, 46, 0) 100%
+  );
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: var(--letter-header-dock, 0);
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.letter-header .section-heading {
+  margin: 0;
 }
 
 .letter-ornament {
@@ -387,19 +447,56 @@ body {
   color: var(--color-crimson);
 }
 
+.letter-content-window {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0,0,0,1) 28%,
+    rgba(0,0,0,1) 62%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0,0,0,1) 28%,
+    rgba(0,0,0,1) 62%,
+    transparent 100%
+  );
+}
+
+.letter-content-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  padding: 0 var(--space-md);
+  transform: translateY(var(--letter-content-y, 100vh));
+  will-change: transform;
+}
+
+.love-letter-body {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.letter-line + .letter-line {
+  margin-top: 22vh;
+}
+
 .letter-salutation {
   font-family: var(--font-heading);
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   color: var(--color-pink-soft);
-  margin-bottom: var(--space-md);
 }
 
 .letter-quote {
   border-left: 3px solid var(--color-crimson);
   padding: var(--space-sm) var(--space-md);
-  margin: var(--space-md) 0;
   font-family: var(--font-heading);
-  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
   color: var(--color-pink-soft);
   font-style: italic;
 }
@@ -414,22 +511,20 @@ body {
 }
 
 .letter-paragraph {
-  margin-bottom: var(--space-md);
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   line-height: 1.8;
 }
 
 .letter-divider {
-  text-align: center;
-  margin: var(--space-lg) 0;
-  color: var(--color-gold);
-  font-size: 1.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--color-gold) 50%, transparent 100%);
+  margin: 0 auto;
+  width: 60%;
 }
 
 .letter-closing {
   text-align: center;
-  margin-top: var(--space-lg);
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   color: var(--color-white-80);
 }
 
@@ -452,13 +547,14 @@ body {
   justify-content: center;
   overflow: hidden;
   z-index: 2;
+  background: rgba(26,10,46,0.55);
 }
 
 .closing-bg-layer {
   position: absolute;
   inset: -20%;
   background:
-    radial-gradient(ellipse at 50% 50%, var(--color-crimson-dk) 0%, var(--color-bg-deep) 70%);
+    radial-gradient(ellipse at 50% 50%, rgba(139,0,0,0.55) 0%, transparent 70%);
   will-change: transform;
 }
 
@@ -505,13 +601,19 @@ body {
 
 .fade-in-target {
   opacity: 0;
-  transform: translateY(28px);
+  transform: translateY(calc(28px + var(--parallax-y, 0px)));
   transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
 .fade-in-target.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(var(--parallax-y, 0px));
+}
+
+[data-scroll-fade] {
+  opacity: 0;
+  transition: none;
+  transform: translateY(var(--parallax-y, 0px));
 }
 
 /* ========================================
@@ -595,6 +697,43 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .section-love-letter {
+    height: auto;
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .letter-stage {
+    position: static;
+    height: auto;
+  }
+
+  .letter-header {
+    position: static;
+    transform: none;
+    margin-bottom: var(--space-lg);
+  }
+
+  .letter-header::before {
+    opacity: 1;
+  }
+
+  .letter-content-window {
+    position: static;
+    overflow: visible;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
+  .letter-content-track {
+    position: static;
+    transform: none;
+    padding: 0;
+  }
+
+  .letter-line + .letter-line {
+    margin-top: var(--space-md);
+  }
+
   .fade-in-target {
     opacity: 1;
     transform: none;
