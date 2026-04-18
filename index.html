@@ -13,6 +13,21 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- Loading Screen -->
+  <div id="loading-screen" role="status" aria-label="Loading">
+    <div class="loader-content">
+      <div class="loader-heart" aria-hidden="true">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50,85 C25,65 5,50 5,35 C5,20 15,10 25,10 C35,10 45,18 50,28 C55,18 65,10 75,10 C85,10 95,20 95,35 C95,50 75,65 50,85 Z" fill="currentColor"/>
+        </svg>
+      </div>
+      <p class="loader-message">Just a moment…</p>
+      <div class="loader-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="loader-progressbar-wrap">
+        <div class="loader-progress-bar" id="loader-progress-bar"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- Background audio -->
   <audio id="bg-audio" src="assets/audio1.mp3" loop preload="auto"></audio>
 
@@ -106,28 +121,23 @@
       <div class="letter-content-window">
         <div class="letter-content-track">
           <article class="love-letter-body">
-            <p class="letter-salutation letter-line">Hey friend,</p>
-
-            <blockquote class="letter-quote letter-line">
-              <p>"A friend is someone who knows all about you and still loves you."</p>
-              <!-- <cite>— Elbert Hubbard</cite> -->
-            </blockquote>
+            <p class="letter-salutation letter-line">My love,</p>
 
             <p class="letter-paragraph letter-line">
-              Your friendship has been one of the greatest gifts in my life. Your laughter is contagious, your kindness is genuine, and your presence makes every moment more meaningful. On this special day, I want to celebrate all the wonderful things that make you uniquely you.
+              Every day with you feels like a dream I never want to wake from. Your laughter fills my heart with warmth, your touch brings me peace, and your presence makes everything beautiful. On this special day, I want you to know how deeply I cherish you.
             </p>
 
             <p class="letter-paragraph letter-line">
-              You've shown me what it means to be a true friend — someone who listens, supports, and celebrates life's moments together. The way you care about others, the strength you show in difficult times, and the joy you bring to our friendship are truly inspiring.
+              You have taught me what it means to love unconditionally, to dream fearlessly, and to believe in forever. The way you see the world, the kindness in your heart, the strength in your spirit — these are the things that make me fall for you more every single day.
             </p>
 
             <p class="letter-paragraph letter-line">
-              Thank you for being the amazing friend you are. Happy birthday! Here's to celebrating your special day and to many more years of laughter, adventures, and cherished memories together.
+              Thank you for being my greatest adventure, my safest place, and my forever home. Happy birthday to My Best Friend and My Everything. Here's to a thousand more moments of joy, laughter, and endless love.
             </p>
 
             <div class="letter-divider letter-line" aria-hidden="true"></div>
 
-            <p class="letter-closing letter-line">With great appreciation,<br><span class="letter-signature">Logesh</span></p>
+            <p class="letter-closing letter-line">Forever yours,<br><span class="letter-signature">Logesh</span></p>
           </article>
         </div>
       </div>

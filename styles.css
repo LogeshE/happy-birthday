@@ -55,6 +55,82 @@ body {
 }
 
 /* ========================================
+   LOADING SCREEN
+   ======================================== */
+
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(ellipse at 50% 60%, #1f0028 0%, #0a000f 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.9s ease, visibility 0.9s ease;
+}
+
+#loading-screen.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  text-align: center;
+}
+
+.loader-heart {
+  width: 90px;
+  height: 90px;
+  color: #ff69b4;
+  animation: loaderHeartbeat 1.3s ease-in-out infinite;
+  filter: drop-shadow(0 0 18px rgba(255, 105, 180, 0.65));
+}
+
+@keyframes loaderHeartbeat {
+  0%   { transform: scale(1);    filter: drop-shadow(0 0 18px rgba(255,105,180,0.65)); }
+  12%  { transform: scale(1.35); filter: drop-shadow(0 0 32px rgba(255,105,180,0.95)); }
+  24%  { transform: scale(1.08); filter: drop-shadow(0 0 20px rgba(255,105,180,0.70)); }
+  36%  { transform: scale(1.22); filter: drop-shadow(0 0 26px rgba(255,105,180,0.85)); }
+  52%  { transform: scale(1);    filter: drop-shadow(0 0 18px rgba(255,105,180,0.65)); }
+  100% { transform: scale(1);    filter: drop-shadow(0 0 18px rgba(255,105,180,0.65)); }
+}
+
+.loader-message {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.06em;
+}
+
+.loader-progress {
+  width: 220px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.loader-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ff69b4, #c77dff, #ff69b4);
+  background-size: 200% 100%;
+  border-radius: 3px;
+  transition: width 0.35s ease;
+  animation: loaderShimmer 1.8s linear infinite;
+}
+
+@keyframes loaderShimmer {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* ========================================
    FIXED OVERLAY LAYERS
    ======================================== */
 
@@ -490,9 +566,10 @@ body {
 }
 
 .letter-salutation {
-  font-family: var(--font-heading);
-  font-size: 1.4rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
   color: var(--color-pink-soft);
+  letter-spacing: 0.02em;
 }
 
 .letter-quote {
@@ -514,8 +591,11 @@ body {
 }
 
 .letter-paragraph {
-  font-size: 1.1rem;
-  line-height: 1.8;
+  font-family: var(--font-heading);
+  font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+  line-height: 2;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.01em;
 }
 
 .letter-divider {
@@ -527,15 +607,19 @@ body {
 
 .letter-closing {
   text-align: center;
-  font-size: 1.15rem;
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 2.5vw, 1.3rem);
   color: var(--color-white-80);
+  line-height: 1.8;
 }
 
 .letter-signature {
   font-family: var(--font-display);
-  font-size: 2.5rem;
+  font-size: clamp(2.5rem, 5vw, 3.2rem);
   color: var(--color-gold);
   animation: glowPulse 3s ease-in-out infinite;
+  display: block;
+  margin-top: 0.3em;
 }
 
 /* ========================================

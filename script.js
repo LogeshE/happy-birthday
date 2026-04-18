@@ -578,44 +578,115 @@ function initParallax() {
 }
 
 /* ========================================
+   PRELOADER
+   ======================================== */
+
+class Preloader {
+  constructor(assets, onProgress, onComplete) {
+    this.total = assets.length;
+    this.loaded = 0;
+    this.onProgress = onProgress;
+    this.onComplete = onComplete;
+    if (this.total === 0) { onComplete(); return; }
+    assets.forEach(asset => {
+      if (asset.type === 'image') this._loadImage(asset.src);
+      else if (asset.type === 'media') this._loadMedia(asset.el);
+    });
+  }
+
+  _tick() {
+    this.loaded++;
+    const progress = this.loaded / this.total;
+    this.onProgress(progress);
+    if (this.loaded >= this.total) this.onComplete();
+  }
+
+  _loadImage(src) {
+    const img = new Image();
+    img.onload = img.onerror = () => this._tick();
+    img.src = src;
+  }
+
+  _loadMedia(el) {
+    if (!el) { this._tick(); return; }
+    let done = false;
+    const tick = () => { if (done) return; done = true; this._tick(); };
+    if (el.readyState >= 3) { tick(); return; }
+    el.addEventListener('canplaythrough', tick, { once: true });
+    el.addEventListener('error', tick, { once: true });
+    setTimeout(tick, 10000); // fallback: don't block forever
+  }
+}
+
+/* ========================================
    BOOTSTRAP
    ======================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const loaderScreen  = document.getElementById('loading-screen');
+  const progressBar   = document.getElementById('loader-progress-bar');
+  const progressWrap  = document.getElementById('loader-progressbar-wrap');
 
-  const particles = new ParticleSystem('particle-canvas');
-  if (!prefersReduced) particles.start();
+  function startApp() {
+    if (loaderScreen) {
+      loaderScreen.classList.add('is-hidden');
+      loaderScreen.addEventListener('transitionend', () => loaderScreen.remove(), { once: true });
+    }
 
-  const hearts = new HeartSystem('hearts-container');
-  if (!prefersReduced) hearts.start();
+    const particles = new ParticleSystem('particle-canvas');
+    if (!prefersReduced) particles.start();
 
-  PetalSystem.init('petals-container');
-  if (!prefersReduced) PetalSystem.start();
+    const hearts = new HeartSystem('hearts-container');
+    if (!prefersReduced) hearts.start();
 
-  ScrollAnimations.init();
+    PetalSystem.init('petals-container');
+    if (!prefersReduced) PetalSystem.start();
 
-  if (!prefersReduced) LetterScrollEffect.init();
+    ScrollAnimations.init();
 
-  const carousel = new Carousel('carousel-track', 'carousel-dots');
-  carousel.init();
+    if (!prefersReduced) LetterScrollEffect.init();
 
-  // Play background audio on first user interaction (browser autoplay policy)
-  const bgAudio = document.getElementById('bg-audio');
-  if (bgAudio) {
-    const startAudio = () => {
+    const carousel = new Carousel('carousel-track', 'carousel-dots');
+    carousel.init();
+
+    const bgAudio = document.getElementById('bg-audio');
+    if (bgAudio) {
+      const startAudio = () => {
+        bgAudio.play().catch(() => {});
+      };
+      document.addEventListener('click', startAudio, { once: true, passive: true });
+      document.addEventListener('touchstart', startAudio, { once: true, passive: true });
       bgAudio.play().catch(() => {});
-      document.removeEventListener('click', startAudio);
-      document.removeEventListener('touchstart', startAudio);
-    };
-    document.addEventListener('click', startAudio, { once: true, passive: true });
-    document.addEventListener('touchstart', startAudio, { once: true, passive: true });
-    bgAudio.play().catch(() => {});
+    }
+
+    setTimeout(initParallax, 100);
+
+    window.addEventListener('resize', utils.throttle(() => {
+      particles.resize();
+    }, 200), { passive: true });
   }
 
-  setTimeout(initParallax, 100);
+  const bgAudio = document.getElementById('bg-audio');
+  const bgVideo = document.querySelector('.closing-bg-video');
 
-  window.addEventListener('resize', utils.throttle(() => {
-    particles.resize();
-  }, 200), { passive: true });
+  const assets = [
+    { type: 'image', src: 'assets/1.jpg' },
+    { type: 'image', src: 'assets/2.jpg' },
+    { type: 'image', src: 'assets/3.jpg' },
+    { type: 'image', src: 'assets/4.jpg' },
+    { type: 'image', src: 'assets/5.jpg' },
+    { type: 'image', src: 'assets/6.jpg' },
+    { type: 'media', el: bgAudio },
+    { type: 'media', el: bgVideo },
+  ].filter(a => a.type === 'image' || a.el);
+
+  new Preloader(
+    assets,
+    (progress) => {
+      if (progressBar) progressBar.style.width = (progress * 100) + '%';
+      if (progressWrap) progressWrap.setAttribute('aria-valuenow', Math.round(progress * 100));
+    },
+    () => setTimeout(startApp, 350)
+  );
 });
