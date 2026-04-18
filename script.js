@@ -628,6 +628,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const progressBar   = document.getElementById('loader-progress-bar');
   const progressWrap  = document.getElementById('loader-progressbar-wrap');
 
+  const bgAudioEarly = document.getElementById('bg-audio');
+  let audioUnlocked = false;
+  const unlockAudio = () => {
+    if (audioUnlocked || !bgAudioEarly) return;
+    audioUnlocked = true;
+    bgAudioEarly.play().catch(() => {});
+    document.removeEventListener('click', unlockAudio);
+    document.removeEventListener('touchstart', unlockAudio);
+  };
+  document.addEventListener('click', unlockAudio, { passive: true });
+  document.addEventListener('touchstart', unlockAudio, { passive: true });
+
   function startApp() {
     if (loaderScreen) {
       loaderScreen.classList.add('is-hidden');
@@ -650,14 +662,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const carousel = new Carousel('carousel-track', 'carousel-dots');
     carousel.init();
 
-    const bgAudio = document.getElementById('bg-audio');
-    if (bgAudio) {
-      const startAudio = () => {
-        bgAudio.play().catch(() => {});
-      };
-      document.addEventListener('click', startAudio, { once: true, passive: true });
-      document.addEventListener('touchstart', startAudio, { once: true, passive: true });
-      bgAudio.play().catch(() => {});
+    if (bgAudioEarly && !audioUnlocked) {
+      bgAudioEarly.play().catch(() => {});
     }
 
     setTimeout(initParallax, 100);
