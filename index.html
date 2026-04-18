@@ -13,6 +13,9 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- Background audio -->
+  <audio id="bg-audio" src="assets/audio1.mp3" loop preload="auto"></audio>
+
   <!-- Fixed/overlay layers -->
   <canvas id="particle-canvas" aria-hidden="true"></canvas>
   <div id="hearts-container" aria-hidden="true"></div>
@@ -24,7 +27,7 @@
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <p class="hero-eyebrow">A very special day</p>
-      <h1 class="hero-title">Happy Birthday,<br><span class="hero-name">My Friend</span></h1>
+      <h1 class="hero-title">Happy Birthday,<br><span class="hero-name">Navi</span></h1>
       <p class="hero-subtitle">Today is brighter because you're here to celebrate it with us.</p>
       <a href="#gallery" class="scroll-cta" aria-label="Scroll to memories">
         <span class="scroll-cta-text">Our Memories</span>
@@ -42,44 +45,42 @@
       <div class="carousel" id="photo-carousel" role="region" aria-label="Photo memories">
         <div class="carousel-track" id="carousel-track">
           <div class="polaroid-card" data-index="0">
-            <div class="polaroid-photo" style="--ph-color1: #2d1b69; --ph-color2: #c0392b;">
-              <span class="photo-placeholder-icon" aria-hidden="true"></span>
+            <div class="polaroid-photo">
+              <img src="assets/1.JPG" alt="Memory 1">
             </div>
             <p class="polaroid-caption">A moment frozen in time</p>
           </div>
           <div class="polaroid-card" data-index="1">
-            <div class="polaroid-photo" style="--ph-color1: #4a1942; --ph-color2: #ff69b4;">
-              <span class="photo-placeholder-icon" aria-hidden="true"></span>
+            <div class="polaroid-photo">
+              <img src="assets/2.JPG" alt="Memory 2">
             </div>
             <p class="polaroid-caption">Your smile that changed everything</p>
           </div>
           <div class="polaroid-card" data-index="2">
-            <div class="polaroid-photo" style="--ph-color1: #c0392b; --ph-color2: #ffb3d1;">
-              <span class="photo-placeholder-icon" aria-hidden="true"></span>
+            <div class="polaroid-photo">
+              <img src="assets/3.JPG" alt="Memory 3">
             </div>
             <p class="polaroid-caption">Dancing under the stars</p>
           </div>
           <div class="polaroid-card" data-index="3">
-            <div class="polaroid-photo" style="--ph-color1: #8b0000; --ph-color2: #2d1b69;">
-              <span class="photo-placeholder-icon" aria-hidden="true"></span>
+            <div class="polaroid-photo">
+              <img src="assets/4.JPG" alt="Memory 4">
             </div>
             <p class="polaroid-caption">Forever with you</p>
           </div>
           <div class="polaroid-card" data-index="4">
-            <div class="polaroid-photo" style="--ph-color1: #7b2cbf; --ph-color2: #ff69b4;">
-              <span class="photo-placeholder-icon" aria-hidden="true"></span>
+            <div class="polaroid-photo">
+              <img src="assets/5.JPG" alt="Memory 5">
             </div>
             <p class="polaroid-caption">In your arms, home</p>
           </div>
           <div class="polaroid-card" data-index="5">
-            <div class="polaroid-photo" style="--ph-color1: #ffb3d1; --ph-color2: #4a1942;">
-              <span class="photo-placeholder-icon" aria-hidden="true"></span>
+            <div class="polaroid-photo">
+              <img src="assets/6.JPG" alt="Memory 6">
             </div>
             <p class="polaroid-caption">A beautiful memory we'll cherish forever</p>
           </div>
         </div>
-        <button class="carousel-btn carousel-btn--prev" id="carousel-prev" aria-label="Previous photo">&#8249;</button>
-        <button class="carousel-btn carousel-btn--next" id="carousel-next" aria-label="Next photo">&#8250;</button>
         <div class="carousel-dots" id="carousel-dots" role="tablist" aria-label="Photo navigation"></div>
       </div>
     </div>
@@ -109,7 +110,7 @@
 
             <blockquote class="letter-quote letter-line">
               <p>"A friend is someone who knows all about you and still loves you."</p>
-              <cite>— Elbert Hubbard</cite>
+              <!-- <cite>— Elbert Hubbard</cite> -->
             </blockquote>
 
             <p class="letter-paragraph letter-line">
@@ -126,7 +127,7 @@
 
             <div class="letter-divider letter-line" aria-hidden="true"></div>
 
-            <p class="letter-closing letter-line">With great appreciation,<br><span class="letter-signature">Your Friend</span></p>
+            <p class="letter-closing letter-line">With great appreciation,<br><span class="letter-signature">Logesh</span></p>
           </article>
         </div>
       </div>
@@ -135,6 +136,9 @@
 
   <!-- ======================== SECTION 4: CLOSING ======================== -->
   <section id="closing" class="section-closing">
+    <video class="closing-bg-video" autoplay muted loop playsinline>
+      <source src="assets/video1.mp4" type="video/mp4">
+    </video>
     <div class="closing-bg-layer rellax" data-rellax-speed="-2" data-rellax-mobile-speed="-0.3" data-rellax-tablet-speed="-1"></div>
     <div class="section-inner closing-inner">
       <div class="closing-heart-anim fade-in-target" id="closing-heart" aria-hidden="true">

@@ -245,17 +245,16 @@ const PetalSystem = {
    ======================================== */
 
 class Carousel {
-  constructor(trackId, prevBtnId, nextBtnId, dotsId) {
+  constructor(trackId, dotsId) {
     this.track = document.getElementById(trackId);
     this.cards = Array.from(this.track.querySelectorAll('.polaroid-card'));
-    this.prevBtn = document.getElementById(prevBtnId);
-    this.nextBtn = document.getElementById(nextBtnId);
     this.dotsContainer = document.getElementById(dotsId);
     this.currentIndex = 0;
     this.total = this.cards.length;
     this.touchStartX = 0;
     this.touchStartY = 0;
     this.isDragging = false;
+    this.autoSlideInterval = null;
   }
 
   _buildDots() {
@@ -286,17 +285,18 @@ class Carousel {
   }
 
   goTo(index) {
-    this.currentIndex = Math.max(0, Math.min(index, this.total - 1));
+    this.currentIndex = ((index % this.total) + this.total) % this.total;
     this._updatePosition();
     this._updateDots();
-    this.prevBtn.disabled = this.currentIndex === 0;
-    this.nextBtn.disabled = this.currentIndex === this.total - 1;
+  }
+
+  _startAutoSlide() {
+    this.autoSlideInterval = setInterval(() => {
+      this.goTo(this.currentIndex + 1);
+    }, 3000);
   }
 
   _bindEvents() {
-    this.prevBtn.addEventListener('click', () => this.goTo(this.currentIndex - 1));
-    this.nextBtn.addEventListener('click', () => this.goTo(this.currentIndex + 1));
-
     this.track.addEventListener('touchstart', e => {
       this.touchStartX = e.touches[0].clientX;
       this.touchStartY = e.touches[0].clientY;
@@ -326,6 +326,7 @@ class Carousel {
     this._buildDots();
     this._bindEvents();
     this.goTo(0);
+    this._startAutoSlide();
   }
 }
 
@@ -596,8 +597,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (!prefersReduced) LetterScrollEffect.init();
 
-  const carousel = new Carousel('carousel-track', 'carousel-prev', 'carousel-next', 'carousel-dots');
+  const carousel = new Carousel('carousel-track', 'carousel-dots');
   carousel.init();
+
+  // Play background audio on first user interaction (browser autoplay policy)
+  const bgAudio = document.getElementById('bg-audio');
+  if (bgAudio) {
+    const startAudio = () => {
+      bgAudio.play().catch(() => {});
+      document.removeEventListener('click', startAudio);
+      document.removeEventListener('touchstart', startAudio);
+    };
+    document.addEventListener('click', startAudio, { once: true, passive: true });
+    document.addEventListener('touchstart', startAudio, { once: true, passive: true });
+    bgAudio.play().catch(() => {});
+  }
 
   setTimeout(initParallax, 100);
 

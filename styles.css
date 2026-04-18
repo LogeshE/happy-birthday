@@ -266,12 +266,15 @@ body {
 .polaroid-photo {
   aspect-ratio: 4/3;
   border-radius: 2px;
-  background: linear-gradient(135deg, var(--ph-color1, #2d1b69), var(--ph-color2, #4a1942));
-  display: flex;
-  align-items: center;
-  justify-content: center;
   margin-bottom: var(--space-sm);
   overflow: hidden;
+}
+
+.polaroid-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .photo-placeholder-icon::before {
@@ -548,6 +551,16 @@ body {
   overflow: hidden;
   z-index: 2;
   background: rgba(26,10,46,0.55);
+}
+
+.closing-bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.5;
+  z-index: 0;
 }
 
 .closing-bg-layer {
