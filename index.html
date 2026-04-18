@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday, My Love</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Great+Vibes&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Fixed/overlay layers -->
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+  <div id="hearts-container" aria-hidden="true"></div>
+  <div id="petals-container" aria-hidden="true"></div>
+
+  <!-- ======================== SECTION 1: HERO ======================== -->
+  <section id="hero" class="section-hero">
+    <div class="hero-bg-layer rellax" data-rellax-speed="-3" data-rellax-mobile-speed="-0.5" data-rellax-tablet-speed="-1.5"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">A very special day</p>
+      <h1 class="hero-title">Happy Birthday,<br><span class="hero-name">My Love</span></h1>
+      <p class="hero-subtitle">Today the world is brighter because you are in it.</p>
+      <a href="#gallery" class="scroll-cta" aria-label="Scroll to memories">
+        <span class="scroll-cta-text">Our Memories</span>
+        <span class="scroll-cta-arrow" aria-hidden="true">↓</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ======================== SECTION 2: GALLERY ======================== -->
+  <section id="gallery" class="section-gallery">
+    <div class="section-inner">
+      <h2 class="section-heading fade-in-target">Beautiful Moments</h2>
+      <p class="section-subheading fade-in-target">Every frame, a memory I'll hold forever.</p>
+
+      <div class="carousel" id="photo-carousel" role="region" aria-label="Photo memories">
+        <div class="carousel-track" id="carousel-track">
+          <div class="polaroid-card" data-index="0">
+            <div class="polaroid-photo" style="--ph-color1: #2d1b69; --ph-color2: #c0392b;">
+              <span class="photo-placeholder-icon" aria-hidden="true"></span>
+            </div>
+            <p class="polaroid-caption">A moment frozen in time</p>
+          </div>
+          <div class="polaroid-card" data-index="1">
+            <div class="polaroid-photo" style="--ph-color1: #4a1942; --ph-color2: #ff69b4;">
+              <span class="photo-placeholder-icon" aria-hidden="true"></span>
+            </div>
+            <p class="polaroid-caption">Your smile that changed everything</p>
+          </div>
+          <div class="polaroid-card" data-index="2">
+            <div class="polaroid-photo" style="--ph-color1: #c0392b; --ph-color2: #ffb3d1;">
+              <span class="photo-placeholder-icon" aria-hidden="true"></span>
+            </div>
+            <p class="polaroid-caption">Dancing under the stars</p>
+          </div>
+          <div class="polaroid-card" data-index="3">
+            <div class="polaroid-photo" style="--ph-color1: #8b0000; --ph-color2: #2d1b69;">
+              <span class="photo-placeholder-icon" aria-hidden="true"></span>
+            </div>
+            <p class="polaroid-caption">Forever with you</p>
+          </div>
+          <div class="polaroid-card" data-index="4">
+            <div class="polaroid-photo" style="--ph-color1: #7b2cbf; --ph-color2: #ff69b4;">
+              <span class="photo-placeholder-icon" aria-hidden="true"></span>
+            </div>
+            <p class="polaroid-caption">In your arms, home</p>
+          </div>
+          <div class="polaroid-card" data-index="5">
+            <div class="polaroid-photo" style="--ph-color1: #ffb3d1; --ph-color2: #4a1942;">
+              <span class="photo-placeholder-icon" aria-hidden="true"></span>
+            </div>
+            <p class="polaroid-caption">A beautiful memory we'll cherish forever</p>
+          </div>
+        </div>
+        <button class="carousel-btn carousel-btn--prev" id="carousel-prev" aria-label="Previous photo">&#8249;</button>
+        <button class="carousel-btn carousel-btn--next" id="carousel-next" aria-label="Next photo">&#8250;</button>
+        <div class="carousel-dots" id="carousel-dots" role="tablist" aria-label="Photo navigation"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider" aria-hidden="true">
+    <svg class="divider-svg" viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,30 Q300,10 600,30 T1200,30" stroke="rgba(255,105,180,0.3)" stroke-width="2" fill="none"/>
+      <circle cx="600" cy="30" r="3" fill="rgba(255,105,180,0.6)"/>
+    </svg>
+  </div>
+
+  <!-- ======================== SECTION 3: LOVE LETTER ======================== -->
+  <section id="love-letter" class="section-love-letter">
+    <div class="section-inner section-inner--narrow">
+      <div class="letter-header fade-in-target">
+        <span class="letter-ornament" aria-hidden="true">♥</span>
+        <h2 class="section-heading">A Letter For You</h2>
+        <span class="letter-ornament" aria-hidden="true">♥</span>
+      </div>
+
+      <article class="love-letter-body">
+        <p class="letter-salutation fade-in-target">My dearest,</p>
+
+        <blockquote class="letter-quote fade-in-target">
+          <p>"In all the world, there is no heart for me like yours."</p>
+          <cite>— Maya Angelou</cite>
+        </blockquote>
+
+        <p class="letter-paragraph fade-in-target">
+          Every day with you feels like a dream I never want to wake from. Your laughter fills my heart with warmth, your touch brings me peace, and your presence makes everything beautiful. On this special day, I want you to know how deeply I cherish you.
+        </p>
+
+        <p class="letter-paragraph fade-in-target">
+          You have taught me what it means to love unconditionally, to dream fearlessly, and to believe in forever. The way you see the world, the kindness in your heart, the strength in your spirit — these are the things that make me fall for you more every single day.
+        </p>
+
+        <p class="letter-paragraph fade-in-target">
+          Thank you for being my greatest adventure, my safest place, and my forever home. Happy birthday to the love of my life. Here's to a thousand more moments of joy, laughter, and endless love.
+        </p>
+
+        <div class="letter-divider fade-in-target" aria-hidden="true"></div>
+
+        <p class="letter-closing fade-in-target">With all my love,<br><span class="letter-signature">Forever Yours</span></p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ======================== SECTION 4: CLOSING ======================== -->
+  <section id="closing" class="section-closing">
+    <div class="closing-bg-layer rellax" data-rellax-speed="-2" data-rellax-mobile-speed="-0.3" data-rellax-tablet-speed="-1"></div>
+    <div class="section-inner closing-inner">
+      <div class="closing-heart-anim fade-in-target" id="closing-heart" aria-hidden="true">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50,85 C25,65 5,50 5,35 C5,20 15,10 25,10 C35,10 45,18 50,28 C55,18 65,10 75,10 C85,10 95,20 95,35 C95,50 75,65 50,85 Z" fill="currentColor"/>
+        </svg>
+      </div>
+      <h2 class="closing-title fade-in-target">Happy Birthday</h2>
+      <p class="closing-message fade-in-target">
+        Every year with you is the best year of my life.<br>
+        Here's to forever, together.
+      </p>
+      <p class="closing-signature fade-in-target">♥</p>
+    </div>
+  </section>
+
+  <!-- CDN Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/rellax@1.12.1/rellax.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.6.2/dist/simpleParallax.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
