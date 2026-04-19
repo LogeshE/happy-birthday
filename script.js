@@ -631,11 +631,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const bgAudioEarly = document.getElementById('bg-audio');
   let audioUnlocked = false;
   const unlockAudio = () => {
+    console.log('Attempting to unlock audio...', audioUnlocked, bgAudioEarly);
     if (audioUnlocked || !bgAudioEarly) return;
-    audioUnlocked = true;
-    bgAudioEarly.play().catch(() => {});
-    document.removeEventListener('click', unlockAudio);
-    document.removeEventListener('touchstart', unlockAudio);
+    bgAudioEarly.play().then(() => {
+      audioUnlocked = true;
+      document.removeEventListener('click', unlockAudio);
+      document.removeEventListener('touchstart', unlockAudio);
+    }).catch((e) => {console.log('Audio unlock failed, will retry on next interaction.', e);});
   };
   document.addEventListener('click', unlockAudio, { passive: true });
   document.addEventListener('touchstart', unlockAudio, { passive: true });
@@ -662,7 +664,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const carousel = new Carousel('carousel-track', 'carousel-dots');
     carousel.init();
 
-    if (bgAudioEarly && !audioUnlocked) {
+    if (bgAudioEarly && bgAudioEarly.paused) {
       bgAudioEarly.play().catch(() => {});
     }
 
